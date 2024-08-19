@@ -1,0 +1,206 @@
+
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <div class="row px-4">
+    <div class="col-md-3 mb-3">
+      <div class="input-group">
+        <label for="ligne" class="input-group-text" >Ligne :</label>
+        <select class="form-select form-select-sm" name="ligne" id="id_ligne" [(ngModel)]="id_ligne" (change)="getPlan(id_ligne)">
+          <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+            {{ item.id_ligne + " " + item.libelle }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="input-group"> 
+          <label for="ligne" class="input-group-text">Plan :</label>
+          <select class="form-select form-select-sm" name="plan" id="id_plan" [(ngModel)]="id_plan" 
+            (change)="getFonction(id_ligne, id_plan)">
+            <option value="{{ item.id_plan }}" *ngFor="let item of liste_Plan">
+              {{ item.id_plan + " " + item.libelle }}
+            </option>
+          </select>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="input-group"> 
+          <label for="ligne" class="input-group-text">Fonction :</label>
+          <select class="form-select form-select-sm" name="fonction" id="id_fonction" [(ngModel)]="id_fonction"
+            (change)="getOperation(id_ligne, id_plan, id_fonction)">
+            <option value="{{ item.id_fonction }}" *ngFor="let item of liste_Fonction">
+              {{ item.id_fonction + " " + item.libelle }}
+            </option>
+          </select>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="input-group"> 
+          <label for="ligne" class="input-group-text">Opération :</label> 
+          <select class="form-select form-select-sm" name="operation" id="id_operation" [(ngModel)]="id_operation" (change)="changeoperation(id_ligne, id_plan, id_fonction,id_operation)">
+            <option value="{{ item.id_operation }}" *ngFor="let item of liste_Operation">
+              {{ item.id_operation + " " + item.libelle }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  <div class="row px-4 mt-3">
+
+    <div class="col-md-2">
+      <div class="input-group">
+        <label for="ligne" class="input-group-text">Matricule :</label>
+        <select class="form-select form-select-sm" name="fonction" id="matricule" [(ngModel)]="matricule">
+          <option value="{{ item.matricule }}" *ngFor="let item of liste_matricule">
+            {{ item.matricule}}
+          </option>
+        </select>
+      </div>
+  </div>
+
+  <div class="col-md-2">
+      <div class="input-group">
+        <label for="ligne" class="input-group-text">Menu :</label>
+        <select class="form-select form-select-sm" name="fonction" id="menu" [(ngModel)]="menu">
+          <option value= "{{ item.nom_menu }}" *ngFor="let item of liste_menu">
+            {{ item.nom_menu}}
+          </option>
+        </select>
+      </div>
+  </div>
+    <div class="col-md-2">
+        <div class="input-group">
+          <label for="date" class="input-group-text">Date début :</label>
+          <input type="Date" class="form-control " name="" id="" aria-describedby="helpId" placeholder="" 
+            [(ngModel)]="debut" />
+        </div>
+    </div>
+
+    
+      <div class="col-md-2">
+          <div class="input-group">
+            <label for="date" class="input-group-text">Date fin :</label>
+            <input type="Date" class="form-control " name="" id="" aria-describedby="helpId" placeholder="" 
+              [(ngModel)]="fin"  />
+          </div>
+     </div>
+
+    
+
+
+    <div class="col-md-2 d-flex nowrap">
+        <button type="button" class="btn px-5 me-3 text-nowrap" style="background-color: #7ce4a4"
+          (click)=" filtrePlandAction() ">
+          Filtrer
+          <i class="bi bi-funnel"  style="color: black;"></i>
+        </button>
+
+        <button type="button" class="btn px-5 bg-warning text-nowrap"
+          (click)=" reinitialiser() ">
+          Réinitialiser
+          <i class="bi bi-arrow-counterclockwise"  style="color: black;"></i>
+        </button>
+    </div>
+
+    <!-- <div class="col-md-2">
+
+    </div>   -->
+  </div>
+<!-- 
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="container-fluid bg-white p-4 rounded mt-5 ">
+    <div class="table rounded-3" style="overflow-y: scroll;  height:70vh;">
+      <table class="table table-striped text-center align-middle border-light">
+        <tbody>
+          <tr class="text-center bg-dark" style="position: sticky;top: -1px ;z-index: 1000">
+            <th class="text-white text-uppercase">id_ligne</th>
+            <th class="text-white text-uppercase">libelle_ligne</th>
+            <th class="text-white text-uppercase">id_plan</th>
+            <th class="text-white text-uppercase">libelle_plan</th>
+            <th class="text-white text-uppercase">id_fonction</th>
+            <th class="text-white text-uppercase">libelle_fonction</th>
+            <th class="text-white text-uppercase">id_operation</th>
+            <th class="text-white text-uppercase">libelle_operation</th>
+            <th class="text-white text-uppercase">commentaire</th>
+            <th class="text-white text-uppercase">zone_enregistrement</th>
+            <th class="text-white text-uppercase">matricule</th>
+            <th class="text-white text-uppercase">date_creation</th>
+            <th></th>
+          </tr>
+
+          <ng-container *ngIf="liste_plans_actions.length > 0; else noResults">
+            <!-- Votre code actuel pour afficher le tableau -->
+            <ng-container *ngFor="let item of liste_plans_actions">
+              <tr>
+                <th>{{item.id_ligne === null ? "-" : item.id_ligne}}</th>
+                <td>{{item.libelle_ligne === null ? "-" : item.libelle_ligne}}</td>
+                <td>{{item.id_plan === null ? "-" : item.id_plan}}</td>
+                <td>{{item.libelle_plan === null ? "-" : item.libelle_plan}}</td>
+                <td>{{item.id_fonction === null ? "-" : item.id_fonction}}</td>
+                <td>{{item.libelle_fonction === null ? "-" : item.libelle_fonction}}</td>
+                <td>{{item.id_operation === null ? "-" : item.id_operation}}</td>
+                <td>{{item.libelle_operation === null ? "-" : item.libelle_operation}}</td>
+                <td>{{item.commentaire === null ? "-" : item.commentaire}}</td>
+                <td>{{item.zone_enregistrement_libelle}}</td>
+                <td>{{item.matricule}}</td>
+                <td>{{item.date_creation | date : "dd/MM/YYYY" }}</td>
+                <td>
+                  <button type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2" class="btn" [ngClass]="{'btn-success':!item.expanded,'btn-danger':item.expanded, 'invisible': item.liste_tickets.length == 0 }" (click)="item.expanded = !item.expanded">
+                    <i class="bi" [ngClass]="{'bi-caret-down-fill':!item.expanded,'bi-caret-up':item.expanded}"></i>
+                  </button>
+                </td>
+              </tr>
+              <ng-container *ngIf="item.expanded">
+                <tr>            
+                  <th></th>            
+                  <th colspan="2" class="bg-mysuccess">
+                    NUM TICKET
+                  </th>
+                  <th colspan="3" class="bg-mysuccess">
+                    PILOTE
+                  </th>
+                  <th colspan="2" class="bg-mysuccess">
+                    DELAI
+                  </th>
+                  <th colspan="3" class="bg-mysuccess">
+                    ACTION
+                  </th>
+                  <th colspan="2" class="bg-mysuccess">
+                    AVANCEMENT
+                  </th>
+                </tr>
+                <tr *ngFor="let ticket of item.liste_tickets;let i= index;">
+                  <td *ngIf="i==0"  [attr.rowspan]="item.liste_tickets.length"></td>            
+                  <td colspan="2">{{ticket.num_ticket}}</td>
+                  <td colspan="3">{{ticket.pilote}}</td>
+                  <td colspan="2">{{ticket.delai}}</td>
+                  <td colspan="3">{{ticket.action}}</td>
+                  <td colspan="2">{{ticket.avancement}}</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <ng-template #noResults>
+            <tr>
+              <td colspan="12">
+                <img class="mt-4" src="assets/images/illustration-search.jpg" alt="alto">
+                <h3 class="text-nowrap text-muted me-3 mt-3">Aucun résultat</h3>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

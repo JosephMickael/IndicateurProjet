@@ -1,0 +1,104 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <!-- <div class="mt-2 mb-3">
+    <h1 class="text-muted">
+      <i class="bi bi-calendar2-check-fill me-2"></i>Bilan projet
+    </h1>
+  </div>
+  <hr /> -->
+  <div class="row ">
+    <div class="col-2">
+       <div class="input-group">
+         <label for="annee" class="input-group-text">Année:</label>
+         <select class="form-select" name="annee" id="id_annee" [(ngModel)]="annee">
+           <option value="{{ item.value }}" *ngFor="let item of annees">
+             {{ item.value }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-3">
+       <div class="input-group">
+         <label for="ligne" class="input-group-text">Ligne:</label>
+         <select class="form-select" name="ligne" id="id_ligne" [(ngModel)]="id_ligne">
+           <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+             {{ item.id_ligne + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn bg-mysuccess form form-control form-control-sm"
+        (click)="afficherBilan(id_ligne,annee)">Afficher <i class="bi bi-eye-fill" style="color: black;"></i></button>
+    </div>
+  
+    <div class="col-2">
+
+      <button (click)="exportToExcel()" type="button" class="btn btn-secondary form form-control form-control-sm">Exporter <i
+          class="bi bi-download"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div>
+  
+
+  <div style="overflow-y: scroll;  height:70vh;" >
+    <table class="table table-bordered excel-thead " id="table-principale" style="border: 1px solid rgb(224, 223, 223);"> 
+      <thead  style="position: sticky;top: -1px ;z-index: 1000; background-color: black; color: white ;" >
+        <tr class="text-center ">
+          <th>PROJETS</th>
+          <th scope="col">BILANS</th>
+          <th scope="col">OBJECTIF</th>
+          <th scope="col" *ngFor="let m of liste_mois" class="text-uppercase">{{m}}</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white  border-3" *ngFor="let item of liste_Bilan">
+        <tr class="text-center">
+          <!-- <td rowspan="6"
+            style="vertical-align: middle;background-color: rgb(126, 226, 167); color: rgb(9, 2, 2);font-weight: bolder;">
+            {{item.plan + " : " + item.libelle_plan}}</td> -->
+            <td rowspan="6"
+            style="vertical-align: middle;background-color: #c1c1c1; color: rgb(9, 2, 2);font-weight: bolder;">
+            {{item.plan + " : " + item.libelle_plan}}</td>
+          <td>COEFF BUDGET</td>
+          <td>1.00</td>
+          <td [ngClass]="{'bg-mydanger': d.coef_b > 0 && d.coef_b < 1 ,'bg-mysuccess': d.coef_b >= 1 ,'bg-white': d.coef_b == null,'bg-white': d.coef_b == 0 }" *ngFor="let d of item.data">{{ formatVirgule(d.coef_b)}}</td>
+        </tr>
+        <tr class="text-center">
+          <td>COEFF PROD</td>
+          <td>1.00</td>
+          <td [ngClass]="{'bg-mydanger': d.coef_p > 0 && d.coef_p < 1 ,'bg-mysuccess': d.coef_p >= 1 ,'bg-white': d.coef_p == null }" *ngFor="let d of item.data">{{ formatVirgule(d.coef_p)}}</td>
+        </tr>
+        <tr class="text-center">
+          <td>RETOUR CLIENT</td>
+          <td>0</td>
+          <td [ngClass]="{'bg-mydanger': d.retour_client > 0  ,'bg-white': d.retour_client === 0 }" *ngFor="let d of item.data">{{formatVirgule(d.retour_client)}}</td>
+        </tr>
+        <tr class="text-center">
+          <td>FELICITATION CLIENT</td>
+          <td>-</td>
+          <td [ngClass]="{'bg-mydanger': d.felicitation_client > 0 && d.felicitation_client < 1 ,'bg-mysuccess': d.felicitation_client >= 1 ,'bg-white': d.felicitation_client == null,'bg-white': d.felicitation_client === 0 }" *ngFor="let d of item.data">{{ formatVirgule(d.felicitation_client)}}</td>
+        </tr>
+        <tr class="text-center">
+          <td>TAUX QUALITE PROJET</td>
+          <td>{{formatVirgule(item.taux_qualite_obj)}}</td>        
+          <td [ngClass]="{'bg-mydanger': d.taux_qualite < formatVirgule(item.taux_qualite_obj) && d.taux_qualite != 0 && d.taux_qualite != '' && d.taux_qualite != null ,'bg-mysuccess': d.taux_qualite >= formatVirgule(item.taux_qualite_obj) ,'bg-white': d.taux_qualite == null,'bg-white': d.taux_qualite === formatVirgule(item.taux_qualite_obj) }" *ngFor="let d of item.data">{{(formatVirgule(item.taux_qualite_obj) == '-' && formatVirgule(d.taux_qualite) == 0) ||  formatVirgule(d.taux_qualite) == 0 ? '-'  : formatVirgule(d.taux_qualite)}}</td>
+        </tr>
+        <tr class="text-center">
+          <td>RETARD DE LIVRAISON</td>
+          <td>1.00</td>
+          <td  [ngClass]="{'bg-mydanger': d.retard_livraison > 0  ,'bg-white': d.retard_livraison === 0 }" *ngFor="let d of item.data">{{formatVirgule(d.retard_livraison)}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+    
+ 
+
+</div>

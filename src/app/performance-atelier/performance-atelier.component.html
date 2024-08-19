@@ -1,0 +1,300 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <!-- <div class="mt-2 mb-5">
+    <h1 class="text-muted">
+      <i class="bi bi-graph-up"></i> PERFORMANCE ATELIER
+    </h1>
+    <hr />
+  </div> -->
+
+
+  <!-- Filtres -->
+  <div class="row">
+    <div class="col-md-3">
+       <div class="input-group"> 
+         <label for="ligne" class="input-group-text">Ligne:<i class="d-none">{{nom_ligne}}</i></label>
+         <select class="form-select" name="ligne" id="id_ligne" [(ngModel)]="id_ligne" (change)="getPlan(id_ligne)"
+           required>
+           <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+             {{ item.id_ligne + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-md-3">
+       <div class="input-group"> 
+         <label for="ligne" class="input-group-text">Plan:<i class="d-none">{{nom_plan}}</i></label>
+         <select class="form-select" name="plan" id="id_plan" [(ngModel)]="id_plan"
+           (change)="getFonction(id_ligne, id_plan)" required>
+           <option value="{{ item.id_plan }}" *ngFor="let item of liste_Plan">
+             {{ item.id_plan + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group"> 
+         <label for="ligne" class="input-group-text"><i class="d-none">{{nom_fonction}}</i>Fonction:</label>
+         <select class="form-select" name="fonction" id="id_fonction" [(ngModel)]="id_fonction"
+           (change)="getOperation(id_ligne,id_plan, id_fonction)" required>
+           <option value="{{ item.id_fonction }}" *ngFor="let item of liste_Fonction">
+             {{ item.id_fonction + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="" class="input-group-text">Date début:</label>
+         <input type="Date" class="form-control" name="" id="" aria-describedby="helpId" placeholder=""
+           [(ngModel)]="debut" required />
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="" class="input-group-text">Date fin:</label>
+         <input type="Date" class="form-control" name="" id="" aria-describedby="helpId" placeholder=""
+           [(ngModel)]="fin" required />
+       </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-2">
+      <label for="" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class="btn  py-21form form-control form-control-sm" style="background-color: #7ce4a4"
+        (click)=" afficherPerformanceAtelier()">
+        <!-- <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
+        Afficher
+        <i class="bi bi-eye-fill ms-2" style="color: black;"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class=" btn btn-warning form form-control form-control-sm py-2 " [disabled]="isDisabled" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" (click)="clicPlanAction(3)">
+        Plan d'action
+        <i class="bi bi-arrow-up-right-square"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button (click)="exportToExcel()" [disabled]="isDisabledExport" type="button" class="btn btn-secondary form form-control form-control-sm py-1 ">
+        Exporter
+        <i class="bi bi-download ms-2" style="color: white"></i>
+      </button>
+    </div>
+
+  </div>
+  <!-- EndFiltres -->
+
+
+  <!-- Autres éléments de votre page -->
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-12 ">
+      <div style="overflow-x: scroll;  height: 70vh;">
+        <table class="table table-bordered" id="table-principale"  style="border: 1px solid rgb(224, 223, 223);">
+          <thead class="bg-dark text-white tbl-project-review">
+            <tr class="tbl-project-review" style="position: sticky;top: 0;z-index: 1000;">
+              <th style="background-color:  #6c757d; color: white;width: 350px; position: sticky;left: 0; top: 0 ;z-index:1000;white-space: nowrap; "
+                class="tbl-project-review">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Liste des operations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+              <th
+                style="background-color:  #6c757d; color: white;width: 250px; position: sticky; left: 225px; top: 0 ;z-index:1000"
+                class="tbl-project-review text-center">Perfomance</th>
+              <th class="text-nowrap text-uppercase text-center tbl-project-review-date"
+                style="border:1px solid #6c757d;width: 100px;margin-left: 500px;"
+                [ngClass]="{'bg-mywarning text-warning': d.date == '1970-01-01'}" *ngFor="let d of liste_date">{{d.date !=
+                '1970-01-01' ? (d.date | date: "dd MMM") : "SEM-" + d.numero_semaine}}</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let operation of liste_operations;let index = index;">
+            <tr >
+              <!-- <td style="width: 350px; position: sticky;left: 0;z-index:10" rowspan="6"
+                class="text-center align-middle bg-mysuccess fw-bold text-nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ operation.id_operation}} <br>
+                {{operation.libelle}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> -->
+              <td style="background-color: #c1c1c1; width: 350px; position: sticky;left: 0;z-index:10 ; " rowspan="6"
+                class="text-center align-middle  fw-bold text-nowrap">{{ operation.id_operation}} <br>
+                {{operation.libelle}}</td>
+              <ng-container *ngIf="operation.rang == 1">
+                <td class="text-center fw-bold align-middle text-white" style="background-color:  #000000; position: sticky; left: 225px;z-index:10">PREVISION</td>
+                <!-- <td [ngClass]="{'bg-mywarning fw-bold': date_operation.date == '1970-01-01'}" *ngFor="let date_operation of operation.liste_new_date" class="text-center" (blur)="blurPrevision(index,jindex)">{{date_operation.prevision}}</td> -->
+                <td class="text-center" style="width: 100px;"
+                  [ngClass]="{'bg-mywarning fw-bold align-middle': date_operation.date == '1970-01-01'}"
+                  *ngFor="let date_operation of operation.liste_new_date; let jindex = index;">
+                  <span *ngIf="date_operation.date == '1970-01-01'">{{date_operation.prevision}}</span><input
+                    class="form-control border-0 text-center align-middle" *ngIf="date_operation.date != '1970-01-01'"
+                    type="text" (blur)="blurPrevision(index,jindex)" [(ngModel)]="date_operation.prevision">
+                </td>
+              </ng-container>
+
+            </tr>
+            <tr>
+              <!-- <td class="d-none"></td> -->
+              <ng-container *ngIf="operation.rang == 1">
+                <td class="text-center fw-bold align-middle text-white" style="background-color:  #000000;position: sticky; left: 225px;z-index:10">RECEPTION
+                </td>
+                <td class="text-center" style="width: 100px;"
+                  [ngClass]="{'bg-mywarning fw-bold align-middle': date_operation.date == '1970-01-01'}"
+                  *ngFor="let date_operation of operation.liste_new_date; let jindex = index;" class="text-center">
+                  <span *ngIf="date_operation.date == '1970-01-01'">{{date_operation.reception}}</span><input
+                    class="form-control border-0 text-center align-middle" *ngIf="date_operation.date != '1970-01-01'"
+                    type="text" (blur)="blurReception(index,jindex)" [(ngModel)]="date_operation.reception">
+                </td>
+              </ng-container>
+            </tr>
+            <tr>
+              <!-- <td class="d-none"></td> -->
+              <td class="text-center fw-bold align-middle text-white" style="background-color:  #000000;position: sticky; left: 225px;z-index:10">PRODUCTION</td>
+              <td class="text-center" style="width: 100px;"
+                [ngClass]="{'bg-mywarning fw-bold': date_operation.date == '1970-01-01'}"
+                *ngFor="let date_operation of operation.liste_new_date" class="text-center">
+                {{formatVirgule(date_operation.volume)}}</td>
+            </tr>
+            <tr>
+              <!-- <td class="d-none"></td> -->
+              <td class="text-nowrap text-center fw-bold align-middle text-white" style="background-color:  #000000;position: sticky; left: 225px;z-index:10">
+                TEMPS PASSEE</td>
+              <td class="text-center" style="width: 100px;"
+                [ngClass]="{'bg-mywarning fw-bold': date_operation.date == '1970-01-01'}"
+                *ngFor="let date_operation of operation.liste_new_date" class="text-center">
+                {{formatVirgule(date_operation.temps)}}</td>
+            </tr>
+            <tr>
+              <!-- <td class="d-none"></td> -->
+              <td class="text-nowrap text-center fw-bold align-middle text-white" style="background-color:  #000000;position: sticky; left: 225px;z-index:10">
+                OBJECTIF CADENCE</td>
+              <td class="text-center" style="width: 100px;"
+                [ngClass]="{'bg-mywarning fw-bold': date_operation.date == '1970-01-01'}"
+                *ngFor="let date_operation of operation.liste_new_date" class="text-center">
+                {{formatVirgule(date_operation.objectif_cadence)}}</td>
+            </tr>
+            <tr>
+              <!-- <td class="d-none"></td> -->
+              <td class="text-center fw-bold align-middle text-white" style="background-color:  #000000; position: sticky; left: 225px;z-index:10">CADENCE</td>
+              <td class="text-center" style="width: 100px;"
+                [ngClass]="{'bg-mywarning fw-bold': date_operation.date == '1970-01-01' , 'bg-mydanger': date_operation.cadence < formatVirgule(date_operation.objectif_cadence) && date_operation.date !=='1970-01-01' && date_operation.cadence != 0 && date_operation.cadence != '' && date_operation.cadence != null, 'bg-white': date_operation.cadence === 0   } "
+                *ngFor="let date_operation of operation.liste_new_date" class="text-center"> 
+                {{formatVirgule(date_operation.cadence)}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Modal -->
+
+  <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content p-4">
+        <div class="modal-header">
+          <div>
+            <h4 class="text-muted">
+              <i class="bi bi-graph-up"></i>
+              PERFORMANCE ATELIER
+            </h4>
+          </div>
+          <hr />
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Ligne :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_ligne}} {{nom_ligne}}" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Plan :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_plan}} {{nom_plan}}" disabled>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Fonction :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_fonction}} {{nom_fonction}}" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Opération :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_operation}} {{nom_operation}}" disabled>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Commentaire :</label>
+              <textarea class="form-control form-control-sm" rows="4" [(ngModel)]="commentaire"></textarea>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12">
+              <table class="table text-center table-bordered table-borderless" style="border: 1px solid rgb(248, 248, 248);">
+                <thead>
+                  <tr>
+                    <td colspan="6" style="background-color: black;color: white;" class="fw-bold">Plan d'action</td>
+                  </tr>
+                  <tr class="fw-bold bg-mysuccess">
+                    <td style="width: 10%;">N° ticket</td>
+                    <td style="width: 30%;">Pilote</td>
+                    <td style="width: 10%;">Delai</td>
+                    <td style="width: 35%;">Action</td>
+                    <td style="width: 25%;">Avancement</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody class="table-light" *ngFor="let item of listTickets;let index = index">
+                  <tr>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.num_ticket"
+                        (blur)="blurTicketKanboard(index)">
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.pilote" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.delai" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.action" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.avancement" disabled>
+                    </td>
+                    <td><button type="button" class="btn btn-danger" (click)="minus(index)"><i
+                          class="bi bi-dash"></i></button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <button type="button" class="btn btn-warning" style="float:right" (click)="plus()"><i
+                          class="bi bi-plus-lg"></i></button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="enregistrer(3)" [disabled]="isDisabled_modal">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

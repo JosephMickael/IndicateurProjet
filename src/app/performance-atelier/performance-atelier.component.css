@@ -1,0 +1,120 @@
+.bi-chat-left-dots-fill {
+  color: rgb(116, 209, 116);
+}
+
+.bi-eye-fill {
+  color: rgb(130, 130, 248);
+}
+
+.bi-download {
+  color: gray;
+}
+
+.bi-chat-left-dots-fill,
+.bi-eye-fill,
+.bi-download {
+  font-size: 20px;
+}
+
+.td-warning {
+  background-color: goldenrod;
+}
+
+.bg-mywarning {
+  background-color: rgb(255, 212, 23);
+}
+
+/* ======= */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fond sombre semi-transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  /* Assurez-vous que le spinner est au-dessus de tout le reste */
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+
+.bg-mysuccess {
+  background-color: rgb(124, 228, 164);
+}
+.bg-mysuccess-new {
+  border: 1px solid black;
+  background-color: rgb(124, 228, 164,1);
+}
+
+/* ======= */
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  /* Fond sombre semi-transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  /* Assurez-vous que le spinner est au-dessus de tout le reste */
+}
+
+
+/*----*/
+
+.tbl-project-review  {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 500;
+  background-color: black;
+}
+.tbl-project-review-date  {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1;
+  background-color: black;
+}
+/* 
+.tbl-project-review  th:first-child,
+.tbl-project-review  td:first-child {
+   
+    position: sticky;
+    position: -webkit-sticky;
+    left: -11px;
+    
+    background-color: #6c757d;
+    z-index: 40;    
+}
+
+.tbl-project-review  th:nth-child(2) {
+    position: sticky;
+    position: -webkit-sticky;
+    left: 243px;
+    z-index: 40;
+    background-color: #6c757d;
+}
+
+.tbl-project-review  td:nth-child(2) {
+    position: sticky;
+    position: -webkit-sticky;
+    left: 243px;
+    z-index: 20;
+    background-color: #6c757d;
+    color: white;
+} */
+
+.bg-mydanger {
+  background-color:rgb(241, 161, 177);
+}

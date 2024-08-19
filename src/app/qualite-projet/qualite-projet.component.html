@@ -1,0 +1,171 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <!-- <div>
+    <h1>
+      <i class="bi bi-check-circle-fill"></i>
+      QUALITE PROJET
+    </h1>
+  </div>
+  <hr /> -->
+
+  <div class="row ">
+    <div class="col-2">
+      <div class="input-group">
+        <label for="annee" class="input-group-text">Année:</label>
+        <select class="form-select" name="annee" id="id_annee" [(ngModel)]="annee">
+          <option value="{{ item.value }}" *ngFor="let item of annees">
+            {{ item.value }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="input-group">
+        <label for="ligne" class="input-group-text">Ligne:</label>
+        <select class="form-select" name="ligne" id="id_ligne" [(ngModel)]="id_ligne" (change)="getPlan(id_ligne)">
+          <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+            {{ item.id_ligne + " " + item.libelle }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn  form form-control form-control-sm" style="background-color: rgb(126, 226, 167);"
+       (click)=" afficherQualiteProjet(id_ligne, annee)">Afficher <i class="bi bi-eye-fill" style="color: black;"></i></button>
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-warning form form-control form-control-sm py-2"  data-bs-toggle="modal"
+      data-bs-target="#exampleModal" (click)="clicPlanAction(4)">
+        Plan d'action 
+        <i class="bi bi-arrow-up-right-square"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <button (click)="exportToExcel()" type="button" class="btn btn-secondary form form-control form-control-sm py-1 ">
+        Exporter 
+        <i class="bi bi-download" style="color: white"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5" style="overflow-y: scroll;  height: 70vh;  " >
+    <table class="table table-bordered" id="table-principale" style="border: 1px solid rgb(209, 209, 209);" >
+      <thead style="position: sticky;top: -1px ;z-index: 1000; background-color: black; color: white ;" >
+        <tr class="text-center ">
+          <!-- <th>2023</th> -->
+          <th scope="col">PROJETS</th>
+          <th scope="col">OBJECTIF ETAPE FINALE </th>
+          <th scope="col" *ngFor="let m of liste_mois" class="text-uppercase">{{m}}</th>
+        </tr>
+      </thead>
+    
+      <tbody class="bg-white" *ngFor="let item of liste_qualite">
+        <tr class="text-center">
+          <td  style="vertical-align: middle;background-color: #c1c1c1; color: rgb(9, 2, 2);font-weight: bolder;">
+            {{item.plan + " : " + item.libelle_plan}}</td>
+          <td>{{formatVirgule(item.taux_qualite_obj)}}</td>
+          <td [ngClass]="{'bg-mydanger': d.taux_qualite < formatVirgule(item.taux_qualite_obj) && d.taux_qualite != 0 && d.taux_qualite != '' && d.taux_qualite != null ,'bg-mysuccess': d.taux_qualite >= formatVirgule(item.taux_qualite_obj) ,'bg-white': d.taux_qualite == null,'bg-white': d.taux_qualite === formatVirgule(item.taux_qualite_obj) }" *ngFor="let d of item.data">{{(formatVirgule(item.taux_qualite_obj) == '-' && formatVirgule(d.taux_qualite) == 0) ||  formatVirgule(d.taux_qualite) == 0 ? '-'  : formatVirgule(d.taux_qualite)}}</td>
+        </tr>
+      </tbody>
+      
+  
+    </table>
+  </div>
+
+
+     <!-- plan d'action  -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content p-4">
+        <div class="modal-header">
+          <div>
+            <h4 class="text-muted">
+              <i class="bi bi-check-circle-fill"></i>
+             QUALITE PROJET 
+            </h4>
+          </div>
+          <hr />
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="form-label">Ligne :</label>
+              <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_ligne}} {{nom_ligne}}" disabled>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 mt-3">
+              <label class="form-label">Commentaire:</label>
+              <textarea class="form-control form-control-sm" [(ngModel)]="commentaire"></textarea>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12">
+              <table class="table text-center table-bordered table-borderless" style="border: 1px solid rgb(248, 248, 248);">
+                <thead>
+                  <tr>
+                    <td colspan="6" style="background-color: black;color: white;" class="fw-bold">Plan d'action</td>
+                  </tr>
+                  <tr class="fw-bold bg-mysuccess">
+                    <td style="width: 10%;">N° ticket</td>
+                    <td style="width: 30%;">Pilote</td>
+                    <td style="width: 10%;">Delai</td>
+                    <td style="width: 35%;">Action</td>
+                    <td style="width: 25%;">Avancement</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody class="table-light" *ngFor="let item of listTickets;let index = index">
+                  <tr>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.num_ticket"
+                        (blur)="blurTicketKanboard(index)">
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.pilote" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.delai" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.action" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.avancement" disabled>
+                    </td>
+                    <td><button type="button" class="btn btn-danger" (click)="minus(index)"><i
+                          class="bi bi-dash"></i></button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <button type="button" class="btn btn-warning" style="float:right" (click)="plus()"><i
+                          class="bi bi-plus-lg"></i></button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="enregistrer(4)" [disabled]="isDisabled">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ 
+
+
+</div>

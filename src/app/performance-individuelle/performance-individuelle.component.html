@@ -1,0 +1,396 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <!-- <div>
+    <h1>
+      <i class="bi bi-graph-up-arrow"></i>
+      PERFORMANCE INDIVIDUELLE
+    </h1>
+  </div>
+  <hr /> -->
+
+  <!-- Filtres -->
+  <div class="row ">
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="ligne" class="input-group-text" >Ligne:</label>
+         <select class="form-select" name="ligne" id="id_ligne" [(ngModel)]="id_ligne" (change)="getPlan(id_ligne)">
+           <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+             {{ item.id_ligne + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="ligne" class="input-group-text">Plan:</label>
+         <select class="form-select" name="plan" id="id_plan" [(ngModel)]="id_plan"
+           (change)="getFonction(id_ligne, id_plan)">
+           <option value="{{ item.id_plan }}" *ngFor="let item of liste_Plan">
+             {{ item.id_plan + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="ligne" class="input-group-text">Fonction:</label>
+         <select class="form-select" name="fonction" id="id_fonction" [(ngModel)]="id_fonction"
+           (change)="getOperation(id_ligne, id_plan, id_fonction)">
+           <option value="{{ item.id_fonction }}" *ngFor="let item of liste_Fonction">
+             {{ item.id_fonction + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="ligne" class="input-group-text">Operation:</label> 
+         <select class="form-select" name="operation" id="id_operation" [(ngModel)]="id_operation" (change)="changeoperation(id_ligne, id_plan, id_fonction,id_operation)">
+           <option value="{{ item.id_operation }}" *ngFor="let item of liste_Operation">
+             {{ item.id_operation + " " + item.libelle }}
+           </option>
+         </select>
+       </div>
+    </div>
+
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="" class="input-group-text">Date début:</label>
+         <input type="Date" class="form-control" name="" id="" aria-describedby="helpId" placeholder=""
+           [(ngModel)]="debut" />
+       </div>
+    </div>
+    <div class="col-md-2">
+       <div class="input-group">
+         <label for="" class="input-group-text">Date fin:</label>
+         <input type="Date" class="form-control" name="" id="" aria-describedby="helpId" placeholder=""
+           [(ngModel)]="fin" />
+       </div>
+    </div>
+  </div>
+  
+  <div class="d-flex justify-content-end mb-3">
+    <div class="me-3">
+      <label for="" class="form-label">&nbsp;</label>
+      <br />
+      <button type="button" class="btn px-5 py-1" style="background-color: #7ce4a4"
+        (click)="afficherPerformanceIndividuelle()">
+        Afficher
+        <i class="bi bi-eye-fill"  style="color: black;"></i>
+      </button>
+    </div>
+    <div class="col-md-2 me-3 ">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class=" btn btn-warning form form-control form-control-sm py-2 " [disabled]="isDisabled" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" (click)="clicPlanAction(1)">
+        Plan d'action
+        <i class="bi bi-arrow-up-right-square"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button (click)="exportToExcel()" [disabled]="isDisabledExport" type="button" class="btn btn-secondary form form-control form-control-sm py-1 ">
+        Exporter
+        <i class="bi bi-download" style="color: white"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- EndFiltres -->
+
+  <div class="row">
+    <div class="col-2">
+      <table class="table table-bordered border-white" style="max-width: 1000px; min-width: 800px"
+        *ngFor="let item of liste_matricule_only">
+        <tbody>
+          <tr style="visibility: hidden">
+            <td class="text-center" colspan="5">
+              {{ item.date | date : "dd/MM/YYYY" }}
+            </td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Ligne</td>
+            <td colspan="3" rowspan="10" class="text-center align-middle">
+              écart: {{ item.ecart }}% <br /><br />
+              <img src="assets/images/{{item.smiley}}" width="20%" height="20%" />
+            </td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Plan</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Fonction</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Opération</td>
+            <td>{{ item.id_operation }}</td>
+          </tr>
+          <!-- <tr style="visibility: hidden;">
+          <td colspan="2"></td>
+        </tr> -->
+          <tr style="visibility: hidden">
+            <td style="width: 20%;">Cadence Objective</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Cadence Max</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Cadence Min</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Cadence atelier</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Nb Op:</td>
+          </tr>
+          <tr style="visibility: hidden">
+            <td>Nb Op Sup à l'obj:</td>
+          </tr>
+          <!-- <tr style="visibility: hidden;">
+          <td>Cadence moyenne:</td>       
+        </tr> -->
+          <!-- <tr style="visibility: hidden;">
+          <td></td>       
+        </tr> -->
+          <tr>
+            <td style="border: 1px solid #dee2e6; border-right: 0px solid #dee2e6"
+              class="bg-secondary text-white fw-bold" colspan="2">
+              Matricule
+            </td>
+          </tr>
+          <tr *ngFor="let md of item.liste_matricule">
+            <td colspan="2" class="fw-bold" style="border: 1px solid #dee2e6; border-right: 0px solid #dee2e6">
+              {{ md.matricule }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-10 d-flex nowrap" style="overflow-x: auto">
+      <table class="table table-bordered " style="max-width: 1000px; min-width: 800px"
+        *ngFor="let item of liste_matricules_detail">
+        <tbody>
+          <tr>
+            <td class="text-center bg-secondary text-white fw-bold" colspan="5">
+              {{ item.date | date : "dd/MM/YYYY" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Ligne</td>
+            <td>{{ item.id_ligne }}</td>
+            <td colspan="5" rowspan="10" class="fw-bold text-center align-middle">
+              Ecart:
+              <!-- <span
+                class="px-4"
+                [ngClass]="{
+                  'bg-mysuccess text-success':
+                    item.cadence_atelier >= item.cadence_obj,
+                  'bg-mydanger text-danger':
+                    item.cadence_atelier < item.cadence_obj
+                }"
+                >{{ formatVirgule(item.ecart) }}%</span
+              > -->
+              <span class="px-4"
+                [ngClass]="{'bg-mydanger text-danger': item.ecart >= 70,'bg-mywarning text-warning': item.ecart >= 50 && item.ecart < 70,'bg-mysuccess': item.ecart >= 25 && item.ecart < 50,'bg-mysuccess': item.ecart < 25, 'bg-secondary': item.ecart === null}">{{formatVirgule(item.ecart)}}%</span>
+              <br />
+              <br />
+              <!-- <i
+                class="bi fw-bold"
+                style="font-size: 100px"
+                [ngClass]="{
+                  'bi-emoji-smile text-success':
+                    item.cadence_atelier >= item.cadence_obj,
+                  'bi-emoji-frown text-danger':
+                    item.cadence_atelier < item.cadence_obj
+                }"
+              ></i> -->
+              <img src="assets/images/{{item.smiley}}" width="20%" height="20%" />
+            </td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Plan</td>
+            <td>{{ item.id_plan }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Fonction</td>
+            <td>{{ item.id_fonction }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Opération</td>
+            <td>{{ item.id_operation }}</td>
+          </tr>
+          <!-- <tr>
+            <td colspan="2"></td>
+          </tr> -->
+          <tr>
+            <td class="fw-bold" style="width: 20%;">Cadence Objective</td>
+            <td>{{ formatVirgule(item.cadence_obj) }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Cadence Max</td>
+            <td>{{ formatVirgule(item.cadence_max) }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Cadence Min</td>
+            <td>{{ formatVirgule(item.cadence_min) }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Cadence atelier</td>
+            <td>{{ formatVirgule(item.cadence_atelier) }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Nb Op:</td>
+            <td>{{ formatVirgule(item.nombre_operateur) }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold">Nb Op Sup à l'obj:</td>
+            <td>{{ item.nombre_operateur_sup_ob }}</td>
+          </tr>
+          <!-- <tr>
+            <td  class="fw-bold">Cadence moyenne:</td>
+            <td>{{ formatVirgule(item.cadence_moyenne)}}</td>
+          </tr> -->
+          <!-- <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr> -->
+          <tr class="text-center bg-secondary text-white fw-bold">
+            <td>Temps</td>
+            <td>Volume</td>
+            <td>Cadence</td>
+            <td>Tendance</td>
+          </tr>
+          <tr class="text-center" *ngFor="let md of item.liste_matricule">
+            <td>{{ formatVirguleTemps(md.temps) }}</td>
+            <td>{{ formatVirgule(md.volume) }}</td>
+            <td class="fw-bold" [ngClass]="{
+                'bg-mysuccess text-success':
+                  md.cadence >= item.cadence_obj && md.cadence != '-',
+                'bg-mydanger text-danger': md.cadence < item.cadence_obj
+              }">
+              {{ formatVirgule(md.cadence) }}
+            </td>
+            <td>
+              <!-- <i [ngClass]="{
+                'text-danger bi-arrow-down-right':
+                  md.tendance == -1 ,
+                'text-secondary bi-dash-lg': md.tendance == 0, 'text-success bi-arrow-up-right': md.tendance == 1}"  class="bi"></i> -->
+
+              <img src="assets/images/{{md.tendance_image}}" width="20px" height="15px" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- plan d'action  -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content p-4">
+        <div class="modal-header">
+            <div>
+              <h4 class="text-muted">
+                <i class="bi bi-graph-up-arrow"></i>
+                PERFORMANCE INDIVIDUELLE
+              </h4>
+            </div>
+            <hr />
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Ligne :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_ligne}} {{nom_ligne}}" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Plan :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_plan}} {{nom_plan}}" disabled>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Fonction :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_fonction}} {{nom_fonction}}" disabled>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Opération :</label>
+                <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="{{id_operation}} {{nom_operation}}" disabled>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label">Commentaire :</label>
+              <textarea class="form-control form-control-sm" rows="4" [(ngModel)]="commentaire"></textarea>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12">
+              <table class="table text-center table-bordered table-borderless" style="border: 1px solid rgb(248, 248, 248);">
+                <thead>
+                  <tr>
+                    <td colspan="6" style="background-color: black;color: white;" class="fw-bold">Plan d'action</td>
+                  </tr>
+                  <tr class="fw-bold bg-mysuccess">
+                    <td style="width: 10%;">N° ticket</td>
+                    <td style="width: 30%;">Pilote</td>
+                    <td style="width: 10%;">Delai</td>
+                    <td style="width: 35%;">Action</td>
+                    <td style="width: 25%;">Avancement</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody class="table-light" *ngFor="let item of listTickets;let index = index">
+                  <tr>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.num_ticket"
+                        (blur)="blurTicketKanboard(index)">
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.pilote" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.delai" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.action" disabled>
+                    </td>
+                    <td>
+                      <input class="form-control form-control-sm" [(ngModel)]="item.avancement" disabled>
+                    </td>
+                    <td><button type="button" class="btn btn-danger" (click)="minus(index)"><i
+                          class="bi bi-dash"></i></button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <button type="button" class="btn btn-warning" style="float:right" (click)="plus()"><i
+                          class="bi bi-plus-lg"></i></button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="enregistrer(1)" [disabled]="isDisabled_modal">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" (click)="Fermer()" data-bs-dismiss="modal" >Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

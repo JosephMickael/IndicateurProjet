@@ -1,0 +1,7 @@
+INSERT INTO qualite_individuelle (id_ligne,libelle_ligne,id_plan,libelle_plan,id_fonction,libelle_fonction,id_operation,libelle_operation,matricule,volume_controle,nb_faute_pondere,nb_unite_nc,taux_nc,date_recup,date_creation) VALUES
+	 ('070','TANA EDITORIAL SERVICES','7026','JM_CHECK','7071','COMPO_MANUEL','0933','CQ MEP_CA','12084','_','_',NULL,0.0,'2023-09-28','2023-10-06 09:23:42'),
+	 ('070','TANA EDITORIAL SERVICES','0185','CALENDAR_SYS','0371','SAISIE','0996','CQ SAISIE','10299','_','_',NULL,0.0,'2023-09-28','2023-10-06 09:22:57'),
+	 ('070','TANA EDITORIAL SERVICES','0185','CALENDAR_SYS','0371','SAISIE','0996','CQ SAISIE','11307','_','_',NULL,0.0,'2023-09-28','2023-10-06 09:22:57'),
+	 ('070','TANA EDITORIAL SERVICES','0185','CALENDAR_SYS','0371','SAISIE','3100','COMPARAISON','11307','_','_',NULL,0.0,'2023-09-28','2023-10-06 09:22:55'),
+	 ('070','TANA EDITORIAL SERVICES','0185','CALENDAR_SYS','0371','SAISIE','0996','CQ SAISIE','11307','_','_',NULL,0.0,'2023-09-29','2023-10-06 09:22:00'),
+	 ('070','TANA EDITORIAL SERVICES','0185','CALENDAR_SYS','0371','SAISIE','0996','CQ SAISIE','10299','_','_',NULL,0.0,'2023-09-29','2023-10-06 09:21:59');

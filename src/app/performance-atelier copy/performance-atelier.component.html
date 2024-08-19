@@ -1,0 +1,191 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <div class="mt-2 mb-5">
+    <h1 class="text-muted">
+      <i class="bi bi-graph-up"></i> PERFORMANCE ATELIER
+    </h1>
+    <hr />
+  </div>
+
+
+  <!-- Filtres -->
+  <div class="row mt-5 ">
+    <div class="col-md-2">
+      <label for="ligne" class="form-label">Ligne:</label>
+      <select class="form-select" name="ligne" id="id_ligne" [(ngModel)]="id_ligne" (change)="getPlan(id_ligne)" required>
+        <option value="{{ item.id_ligne }}" *ngFor="let item of liste_Ligne">
+          {{ item.id_ligne + " " + item.libelle }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="ligne" class="form-label">Plan:</label>
+      <select class="form-select" name="plan" id="id_plan" [(ngModel)]="id_plan"
+        (change)="getFonction(id_ligne, id_plan)" required>
+        <option value="{{ item.id_plan }}" *ngFor="let item of liste_Plan">
+          {{ item.id_plan + " " + item.libelle }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="ligne" class="form-label">Fonction:</label>
+      <select class="form-select" name="fonction" id="id_fonction" [(ngModel)]="id_fonction"
+        (change)="getOperation(id_ligne,id_plan, id_fonction)" required>
+        <option value="{{ item.id_fonction }}" *ngFor="let item of liste_Fonction">
+          {{ item.id_fonction + " " + item.libelle }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="" class="form-label">Date début:</label>
+      <input type="Date" class="form-control mb-3" name="" id="" aria-describedby="helpId" placeholder=""
+        [(ngModel)]="debut" required />
+    </div>
+    <div class="col-md-2">
+      <label for="" class="form-label">Date fin:</label>
+      <input type="Date" class="form-control mb-3" name="" id="" aria-describedby="helpId" placeholder=""
+        [(ngModel)]="fin"  required/>
+    </div>
+  </div>
+  
+  <div class="row mb-3">
+    <div class="col-md-2">
+      <label for="" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class="btn px-5 py-21form form-control form-control-sm" style="background-color: #7ce4a4" (click)=" afficherPerformanceAtelier()">
+        <!-- <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> -->
+        Afficher
+        <i class="bi bi-eye-fill ms-2" style="color: black;"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class="btn btn-warning form form-control form-control-sm py-2">
+        Plan d'action 
+        <i class="bi bi-arrow-up-right-square ms-2"></i>
+      </button>
+    </div>
+    <div class="col-md-2">
+      <label for="annee" class="form-label">&nbsp;</label>
+      <br>
+      <button type="button" class="btn btn-secondary form form-control form-control-sm py-1 ">
+        Exporter 
+        <i class="bi bi-download ms-2" style="color: white"></i>
+      </button>
+    </div>
+
+  </div>
+  <!-- EndFiltres -->
+
+
+  <!-- Autres éléments de votre page -->
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="spinner-overlay d-flex justify-content-center">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement en cours...</span>
+      </div>
+    </div>
+  </div>
+
+
+<div class="overflow-auto" style="white-space: nowrap; ">
+  <table class="table mt-3 table-bordered">
+    <thead class="bg-secondary text-white" style="top: 80px; font-size: small;">
+      <tr class="text-center">
+        <th scope="col">NOM DU PROJET GEOFONCIER</th>
+        <th>PERFORMANCE</th>
+        <!-- <th [ngClass]="{'bg-mywarning text-dark': d.date === 'SEM' }" scope="col" *ngFor="let d of liste_date" class="text-uppercase">{{ d.date }}</th> -->
+        <th [ngClass]="{'bg-mywarning text-dark': d.date.includes('SEM') }" scope="col" *ngFor="let d of liste_date" class="text-uppercase">
+          {{ d.date.includes('SEM') ? d.date : d.date | date:'dd MMMM' }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white border-3" *ngFor="let item of liste_operations, let i = index ">
+      
+      <tr class="text-center">
+        <td rowspan="7" class="text-dark" style="vertical-align: middle;background-color: #7ce4a4; color: aliceblue;font-weight: bolder;">
+          {{item.id_operation + " : " + item.libelle_operation}}</td>
+
+        <ng-container *ngIf="item.rang === 1">
+          <td>PREVISION</td>
+          <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }"  *ngFor="let performance of item.performance, let j = index">
+              {{ performance.prevision }}
+          </td>
+        </ng-container>
+
+      </tr>
+      <ng-container *ngIf="item.rang === 1">
+        <tr class="text-center">
+          <td>RECEPTION</td>
+          <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }" *ngFor="let performance of item.performance,  let j = index">
+            <ng-container *ngIf="!performance.date.includes('SEM'); else noInput">
+              <input (change)="getReception($event,i, j)" class="form-control border-0 text-center" id="reception+" type="text" [ngModel]="performance.reception">
+            </ng-container>
+            <ng-template #noInput>
+              {{performance.reception}}
+            </ng-template>
+          </td>
+        </tr>
+      </ng-container>
+
+      <tr class="text-center">
+        <td>PRODUCTION</td>
+        <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }" *ngFor="let performance of item.performance">{{ formatVirgule(performance.volume)}}</td>
+      </tr>
+      <tr class="text-center">
+        <td>TEMPS PASSE</td>
+        <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }" *ngFor="let performance of item.performance">{{ formatVirgule(performance.temps) }}</td>
+      </tr>
+      <tr class="text-center">
+        <td>OBJECTIF CADENCE</td>
+        <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }" *ngFor="let performance of item.performance">{{ performance.obj_cadence }}</td>
+      </tr>
+      <tr class="text-center">
+        <td>CADENCE</td>
+        <td [ngClass]="{'bg-mywarning fw-bold': performance.date.includes('SEM') }" *ngFor="let performance of item.performance">{{ formatVirgule(performance.cadence) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <!-- Interface pour renseigner les réceptions -->
+ <!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Interface pour renseigner les réceptions </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-3">
+            <label for="" class="form-label">Prévisions :  </label>
+            <input type="number"
+              class="form-control" name="" id="receptions" aria-describedby="helpId" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label"> Objectif Journalier : </label>
+            <input type="number"
+              class="form-control" name="" id="obj_journalier" aria-describedby="helpId" placeholder="">
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Réceptions : </label>
+            <input type="number"
+              class="form-control" name="" id="previsions" aria-describedby="helpId" placeholder="">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Afficher</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+</div> 

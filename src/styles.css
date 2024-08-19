@@ -1,0 +1,10 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+body{
+    background-color: rgb(245, 245, 245);
+    font-size: 14px;
+    /* font-family: 'Mooli', sans-serif; */
+    /* font-family: 'Poppins', sans-serif; */
+}

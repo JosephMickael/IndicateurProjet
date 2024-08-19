@@ -1,0 +1,45 @@
+.bi-chat-left-dots-fill {
+    color: rgb(116, 209, 116);
+}
+
+.bi-eye-fill {
+    color: rgb(130, 130, 248);
+}
+
+.bi-download {
+    color: gray;
+}
+
+.bi-chat-left-dots-fill, .bi-eye-fill, .bi-download {
+    font-size: 20px;
+}
+
+
+.bg-mysuccess {
+    background-color: rgb(124,228,164);
+}
+.bg-mydanger {
+    background-color:rgb(241, 161, 177);
+}
+.bg-mywarning {
+    background-color:rgb(255,247,87);
+}
+
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Fond sombre semi-transparent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    /* Assurez-vous que le spinner est au-dessus de tout le reste */
+  }
+  
+  .spinner-container {
+    text-align: center;
+  }

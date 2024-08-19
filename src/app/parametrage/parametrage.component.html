@@ -1,0 +1,274 @@
+<div class="container-fluid bg-white p-4 rounded shadow-sm">
+  <!-- Onglet -->
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#onglet1"
+        >ETAPE FINALE PRODUCTION</a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#onglet2">PROJET ACTIF </a>
+    </li>
+  </ul>
+
+  <!-- tab content -->
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="onglet1">
+      <!-- options -->
+      <div class="container-fluid mt-5">
+        <h1 class="text-muted fs-3">
+          <i class="bi bi-gear-wide"></i>
+          PARAMETRAGE ETAPE FINALE PRODUCTION
+        </h1>
+        <hr />
+        <div class="row mt-5">
+          <div class="col">
+            <label for="ligne" class="form-label">Ligne:</label>
+            <select
+              class="form-select"
+              name="ligne"
+              id="id_ligne"
+              [(ngModel)]="id_ligne"
+              (change)="getPlan(id_ligne)"
+            >
+              <option
+                value="{{ item.id_ligne }}"
+                *ngFor="let item of liste_Ligne"
+              >
+                {{ item.id_ligne + " " + item.libelle }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="plan" class="form-label">Plan:</label>
+            <select
+              class="form-select"
+              name="plan"
+              id="id_plan"
+              [(ngModel)]="id_plan"
+              (change)="getFonction(id_ligne, id_plan)"
+            >
+              <option
+                value="{{ item.id_plan }}"
+                *ngFor="let item of liste_Plan"
+              >
+                {{ item.id_plan + " " + item.libelle }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="fonction" class="form-label">fonction:</label>
+            <select
+              class="form-select"
+              name="fonction"
+              id="id_fonction"
+              [(ngModel)]="id_fonction"
+            >
+              <option
+                value="{{ item.id_fonction }}"
+                *ngFor="let item of liste_Fonction"
+              >
+                {{ item.id_fonction + " " + item.libelle }}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <!-- <div class="mb-3"> -->
+            <label for="" class="form-label">id_opération</label>
+            <select class="form-select" name="" id="">
+              <option selected>Select one</option>
+              <option value="">OP1</option>
+              <option value="">OP2</option>
+              <option value="">OP3</option>
+            </select>
+            <!-- </div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- dashboard -->
+      <div class="table-responsive mt-5">
+        <table class="table table-bordered border-light">
+          <tbody class="bg-white border-light border-3">
+            <tr class="text-center bg-light">
+              <th scope="col">ligne</th>
+              <th scope="col">plan</th>
+              <th scope="col">fonction</th>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="onglet2">
+      <!-- champ d'option -->
+      <div class="container-fluid mt-5">
+        <h1 class="text-muted fs-3">
+          <i class="bi bi-gear"></i>
+          PARAMETRAGE PROJET ACTIF
+        </h1>
+        <hr />
+        <div class="row align-items-start mt-5">
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Ligne</label>
+              <label for="ligne" class="form-label">Ligne:</label>
+              <select
+                class="form-select"
+                name="ligne"
+                id="id_ligne"
+                [(ngModel)]="id_ligne1"
+                (change)="getPlan(id_ligne1)"
+              >
+                <option
+                  value="{{ item.id_ligne }}"
+                  *ngFor="let item of liste_Ligne"
+                >
+                  {{ item.id_ligne + " " + item.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Plan</label>
+              <select
+                class="form-select"
+                name="plan"
+                id="id_plan"
+                [(ngModel)]="id_plan1"
+                (change)="getFonction(id_ligne1, id_plan1)"
+              >
+                <option
+                  value="{{ item.id_plan }}"
+                  *ngFor="let item of liste_Plan"
+                >
+                  {{ item.id_plan + " " + item.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Fonction</label>
+              <select
+                class="form-select"
+                name="fonction"
+                id="id_fonction"
+                [(ngModel)]="id_fonction1"
+              >
+                <option
+                  value="{{ item.id_fonction }}"
+                  *ngFor="let item of liste_Fonction"
+                >
+                  {{ item.id_fonction + " " + item.libelle }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">id_opération</label>
+              <select class="form-select" name="" id="">
+                <option selected>Select one</option>
+                <option value="">OP1</option>
+                <option value="">OP2</option>
+                <option value="">OP3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Manager</label>
+              <select class="form-select" name="" id="">
+                <option selected>Select one</option>
+                <option value="">M1</option>
+                <option value="">M2</option>
+                <option value="">M3</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">TEC(n-1)</label>
+              <select class="form-select" name="" id="">
+                <option selected>Select one</option>
+                <option value="">New Delhi</option>
+                <option value="">Istanbul</option>
+                <option value="">Jakarta</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Gain estimé</label>
+              <select class="form-select" name="" id="">
+                <option selected>Select one</option>
+                <option value="">New Delhi</option>
+                <option value="">Istanbul</option>
+                <option value="">Jakarta</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="" class="form-label">Objectif TEC</label>
+              <select class="form-select" name="" id="">
+                <option selected>Select one</option>
+                <option value="">New Delhi</option>
+                <option value="">Istanbul</option>
+                <option value="">Jakarta</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- dashboard -->
+      <div class="table-responsive mt-5">
+        <table class="table table-bordered border-light">
+          <tbody class="bg-white border-light border-3">
+            <tr class="text-center bg-light">
+              <th scope="col">ligne</th>
+              <th scope="col">plan</th>
+              <th scope="col">fonction</th>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="text-center">
+              <td scope="row"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
